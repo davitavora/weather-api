@@ -45,8 +45,8 @@ class PeriodConverterTest {
     public void should_convert_period_when_provided_data_is_valid() {
         Period period = systemUnderTest.convert("2022-01-14,2022-01-30");
         Assertions.assertNotNull(period);
-        Assertions.assertEquals(period.getFrom(), LocalDate.of(2022, 1, 14));
-        Assertions.assertEquals(period.getTo(), LocalDate.of(2022, 1, 30));
+        Assertions.assertEquals(period.from(), LocalDate.of(2022, 1, 14));
+        Assertions.assertEquals(period.to(), LocalDate.of(2022, 1, 30));
     }
 
 }
