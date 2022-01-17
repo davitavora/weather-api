@@ -1,8 +1,8 @@
-package com.oddle.app.weather.model;
+package com.oddle.app.weather.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record Main(
+public record MainDTO(
         Double temp,
         @JsonProperty("feels_like") Double feelsLike,
         @JsonProperty("temp_min") Double tempMin,

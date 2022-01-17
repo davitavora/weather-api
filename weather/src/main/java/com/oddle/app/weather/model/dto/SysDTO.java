@@ -1,6 +1,6 @@
-package com.oddle.app.weather.model;
+package com.oddle.app.weather.model.dto;
 
-public record Sys(
+public record SysDTO(
         Integer type,
         Integer id,
         Double message,

@@ -2,7 +2,7 @@ package com.oddle.app.weather.controller;
 
 import com.oddle.app.weather.exception.BadArgumentException;
 import com.oddle.app.weather.model.Period;
-import com.oddle.app.weather.model.Weather;
+import com.oddle.app.weather.model.dto.WeatherDTO;
 import com.oddle.app.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,23 +20,23 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping(params = {"city"})
-    public List<Weather> findWeathersByCity(@RequestParam String city) {
+    public List<WeatherDTO> findWeathersByCity(@RequestParam String city) {
         return weatherService.findWeathersBy(city);
     }
 
     @GetMapping(params = {"period"})
-    public List<Weather> findWeathersByPeriod(@RequestParam Period period) {
+    public List<WeatherDTO> findWeathersByPeriod(@RequestParam Period period) {
         return weatherService.findWeathersBy(period);
     }
 
     @GetMapping(params = {"city", "period"})
-    public List<Weather> findWeathersByCityAndPeriod(@RequestParam String city, @RequestParam Period period) {
+    public List<WeatherDTO> findWeathersByCityAndPeriod(@RequestParam String city, @RequestParam Period period) {
         return weatherService.findWeathersBy(city, period);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public Weather save(@RequestBody Weather weather) {
+    public WeatherDTO save(@RequestBody WeatherDTO weather) {
         return weatherService.save(weather);
     }
 
@@ -47,7 +47,7 @@ public class WeatherController {
     }
 
     @PutMapping(value = "{id}", consumes = APPLICATION_JSON_VALUE)
-    public Weather update(@PathVariable Long id, @RequestBody Weather weather) {
+    public WeatherDTO update(@PathVariable Long id, @RequestBody WeatherDTO weather) {
         if (!id.equals(weather.id())) throw new BadArgumentException("Path id is different from the provided weather id");
         return weatherService.update(weather);
     }

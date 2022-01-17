@@ -1,8 +1,8 @@
-package com.oddle.app.weather.model;
+package com.oddle.app.weather.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record Fallout(
+public record FalloutDTO(
         @JsonProperty("1h") Double oneHour,
         @JsonProperty("3h") Double threeHour
 ) {

@@ -1,6 +1,6 @@
-package com.oddle.app.weather.model;
+package com.oddle.app.weather.model.dto;
 
-public record Wind(
+public record WindDTO(
         Double speed,
         Double deg,
         Double gust

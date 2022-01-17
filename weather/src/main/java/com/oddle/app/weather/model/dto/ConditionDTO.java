@@ -1,6 +1,6 @@
-package com.oddle.app.weather.model;
+package com.oddle.app.weather.model.dto;
 
-public record Condition(
+public record ConditionDTO(
         Integer id,
         String main,
         String description,

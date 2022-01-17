@@ -3,7 +3,7 @@ package com.oddle.app.weather.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oddle.app.weather.exception.WeatherNotFoundException;
 import com.oddle.app.weather.model.Period;
-import com.oddle.app.weather.model.Weather;
+import com.oddle.app.weather.model.dto.WeatherDTO;
 import com.oddle.app.weather.service.WeatherService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -44,9 +44,9 @@ class WeatherControllerTest {
     class SearchWeatherTest {
 
         @Test
-        public void should_return_a_list_of_weathers_when_only_city_is_provided() throws Exception {
+        void should_return_a_list_of_weathers_when_only_city_is_provided() throws Exception {
             String city = "sample";
-            when(service.findWeathersBy(eq(city))).thenReturn(singletonList(new Weather(1L)));
+            when(service.findWeathersBy(eq(city))).thenReturn(singletonList(new WeatherDTO(1L)));
 
             mockMvc
                     .perform(
@@ -61,9 +61,9 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_list_of_weathers_filtered_by_period_when_only_period_is_provided() throws Exception {
+        void should_return_a_list_of_weathers_filtered_by_period_when_only_period_is_provided() throws Exception {
             Period period = new Period(LocalDate.of(2022, 1, 14), LocalDate.of(2022, 1, 30));
-            when(service.findWeathersBy(eq(period))).thenReturn(asList(new Weather(1L), new Weather(1L)));
+            when(service.findWeathersBy(eq(period))).thenReturn(asList(new WeatherDTO(1L), new WeatherDTO(1L)));
 
             mockMvc.perform(
                     get("/weathers")
@@ -76,10 +76,10 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_list_of_weathers_filtered_by_city_and_period_when_city_and_period_are_provided() throws Exception {
+        void should_return_a_list_of_weathers_filtered_by_city_and_period_when_city_and_period_are_provided() throws Exception {
             String city = "sample";
             Period period = new Period(LocalDate.of(2022, 1, 14), LocalDate.of(2022, 1, 31));
-            when(service.findWeathersBy(eq(city), eq(period))).thenReturn(asList(new Weather(1L), new Weather(1L)));
+            when(service.findWeathersBy(eq(city), eq(period))).thenReturn(asList(new WeatherDTO(1L), new WeatherDTO(1L)));
 
             mockMvc.perform(
                     get("/weathers")
@@ -93,7 +93,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_error_when_period_is_empty() throws Exception {
+        void should_return_a_error_when_period_is_empty() throws Exception {
             mockMvc.perform(
                             get("/weathers")
                                     .queryParam("period", "")
@@ -106,7 +106,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_error_when_period_has_invalid_format() throws Exception {
+        void should_return_a_error_when_period_has_invalid_format() throws Exception {
             mockMvc.perform(
                             get("/weathers")
                                     .queryParam("period", "2022-01-14")
@@ -119,7 +119,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_error_when_from_date_is_invalid() throws Exception {
+        void should_return_a_error_when_from_date_is_invalid() throws Exception {
             mockMvc.perform(
                             get("/weathers")
                                     .queryParam("period", "2022-02-30,2022-03-01")
@@ -132,7 +132,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_error_when_to_date_is_invalid() throws Exception {
+        void should_return_a_error_when_to_date_is_invalid() throws Exception {
             mockMvc.perform(
                             get("/weathers")
                                     .queryParam("period", "2022-01-31,2022-02-30")
@@ -145,7 +145,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_a_error_when_from_date_is_after_to_date() throws Exception {
+        void should_return_a_error_when_from_date_is_after_to_date() throws Exception {
             mockMvc.perform(
                             get("/weathers")
                                     .queryParam("period", "2022-03-31,2022-02-20")
@@ -163,8 +163,8 @@ class WeatherControllerTest {
     class SaveWeatherTest {
 
         @Test
-        public void should_save_a_weather_when_a_valid_weather_is_provided() throws Exception {
-            when(service.save(any(Weather.class))).then(returnsFirstArg());
+        void should_save_a_weather_when_a_valid_weather_is_provided() throws Exception {
+            when(service.save(any(WeatherDTO.class))).then(returnsFirstArg());
 
             mockMvc.perform(
                     post("/weathers")
@@ -252,7 +252,7 @@ class WeatherControllerTest {
     class DeleteWeatherTest {
 
         @Test
-        public void should_delete_a_weather_when_it_exists() throws Exception {
+        void should_delete_a_weather_when_it_exists() throws Exception {
             mockMvc.perform(
                     delete("/weathers/{id}", 1)
             ).andExpectAll(
@@ -262,7 +262,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_an_error_when_weather_doesnt_exists() throws Exception {
+        void should_return_an_error_when_weather_doesnt_exists() throws Exception {
             doThrow(new WeatherNotFoundException("There is no weather with id 2")).when(service).delete(2L);
             mockMvc.perform(
                     delete("/weathers/{id}", 2)
@@ -278,8 +278,8 @@ class WeatherControllerTest {
     class UpdateWeatherTest {
 
         @Test
-        public void should_update_a_weather_when_it_exists() throws Exception {
-            when(service.update(any(Weather.class))).then(returnsFirstArg());
+        void should_update_a_weather_when_it_exists() throws Exception {
+            when(service.update(any(WeatherDTO.class))).then(returnsFirstArg());
             mockMvc.perform(
                     put("/weathers/{id}", 1)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -333,7 +333,7 @@ class WeatherControllerTest {
         }
 
         @Test
-        public void should_return_an_error_when_path_id_is_different_from_provided_weather_id() throws Exception {
+        void should_return_an_error_when_path_id_is_different_from_provided_weather_id() throws Exception {
             mockMvc.perform(
                     put("/weathers/{id}", 1)
                             .contentType(MediaType.APPLICATION_JSON)
